@@ -1,0 +1,116 @@
+<!-- Onboarding Checklist Widget -->
+<!-- Service Portal Widget: x_hrsd_onboarding_checklist -->
+
+<div class="onboarding-checklist-widget">
+
+  <!-- Header -->
+  <div class="widget-header">
+    <div class="header-left">
+      <span class="widget-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 11 12 14 22 4"></polyline>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+        </svg>
+      </span>
+      <div>
+        <h2 class="widget-title">Your Onboarding Checklist</h2>
+        <p class="widget-subtitle">Complete all items before your start date</p>
+      </div>
+    </div>
+    <div class="progress-ring-container" ng-if="c.data.tasks.length > 0">
+      <svg class="progress-ring" width="72" height="72">
+        <circle class="progress-ring-bg" cx="36" cy="36" r="30"
+                stroke="#e2e8f0" stroke-width="6" fill="none"/>
+        <circle class="progress-ring-fill" cx="36" cy="36" r="30"
+                stroke="#10b981" stroke-width="6" fill="none"
+                stroke-dasharray="188.5"
+                ng-attr-stroke-dashoffset="{{c.data.dashOffset}}"
+                stroke-linecap="round"
+                transform="rotate(-90 36 36)"/>
+      </svg>
+      <span class="progress-percent">{{c.data.completedPercent}}%</span>
+    </div>
+  </div>
+
+  <!-- Department Filter Tabs -->
+  <div class="filter-tabs" ng-if="c.data.tasks.length > 0">
+    <button class="tab-btn"
+            ng-class="{'active': c.data.activeFilter === 'all'}"
+            ng-click="c.setFilter('all')">
+      All ({{c.data.tasks.length}})
+    </button>
+    <button class="tab-btn"
+            ng-class="{'active': c.data.activeFilter === 'IT'}"
+            ng-click="c.setFilter('IT')">
+      IT ({{c.data.counts.IT}})
+    </button>
+    <button class="tab-btn"
+            ng-class="{'active': c.data.activeFilter === 'Facilities'}"
+            ng-click="c.setFilter('Facilities')">
+      Facilities ({{c.data.counts.Facilities}})
+    </button>
+    <button class="tab-btn"
+            ng-class="{'active': c.data.activeFilter === 'Payroll'}"
+            ng-click="c.setFilter('Payroll')">
+      Payroll ({{c.data.counts.Payroll}})
+    </button>
+  </div>
+
+  <!-- Task List -->
+  <div class="task-list" ng-if="c.data.tasks.length > 0">
+    <div class="task-item"
+         ng-repeat="task in c.data.filteredTasks track by task.sys_id"
+         ng-class="{'completed': task.state === 'Closed Complete',
+                    'overdue': task.isOverdue && task.state !== 'Closed Complete'}">
+
+      <!-- Status Icon -->
+      <div class="task-status-icon">
+        <span ng-if="task.state === 'Closed Complete'" class="icon-complete">✓</span>
+        <span ng-if="task.isOverdue && task.state !== 'Closed Complete'"
+              class="icon-overdue">!</span>
+        <span ng-if="!task.isOverdue && task.state !== 'Closed Complete'"
+              class="icon-pending">○</span>
+      </div>
+
+      <!-- Task Info -->
+      <div class="task-info">
+        <div class="task-name">{{task.short_description}}</div>
+        <div class="task-meta">
+          <span class="dept-badge dept-{{task.u_department_scope | lowercase}}">
+            {{task.u_department_scope}}
+          </span>
+          <span class="task-assignee" ng-if="task.assignment_group.display_value">
+            → {{task.assignment_group.display_value}}
+          </span>
+          <span class="task-due" ng-if="task.due_date">
+            Due: {{task.due_date | date:'MMM d'}}
+          </span>
+        </div>
+      </div>
+
+      <!-- Priority Indicator -->
+      <div class="priority-dot priority-{{task.priority}}"></div>
+
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" ng-if="c.data.tasks.length === 0">
+    <div class="empty-icon">📋</div>
+    <h3>No tasks yet</h3>
+    <p>Your onboarding checklist will appear here once your HR case is created.</p>
+  </div>
+
+  <!-- Footer -->
+  <div class="widget-footer" ng-if="c.data.tasks.length > 0">
+    <span class="footer-text">
+      {{c.data.completedCount}} of {{c.data.tasks.length}} tasks complete
+    </span>
+    <a class="view-case-link"
+       ng-href="/onboarding/status?case={{c.data.caseNumber}}">
+      View Full Case →
+    </a>
+  </div>
+
+</div>

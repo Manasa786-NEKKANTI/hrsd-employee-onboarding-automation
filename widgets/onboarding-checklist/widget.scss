@@ -1,0 +1,222 @@
+/* Onboarding Checklist Widget Styles */
+/* ServiceNow Service Portal — x_hrsd_onboarding_checklist */
+
+.onboarding-checklist-widget {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+  overflow: hidden;
+
+  // Header
+  .widget-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%);
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .widget-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: #10b981;
+      color: #fff;
+      border-radius: 12px;
+    }
+
+    .widget-title {
+      margin: 0 0 2px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .widget-subtitle {
+      margin: 0;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .progress-ring-container {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      .progress-ring-fill {
+        transition: stroke-dashoffset 0.8s ease;
+      }
+
+      .progress-percent {
+        position: absolute;
+        font-size: 13px;
+        font-weight: 700;
+        color: #10b981;
+      }
+    }
+  }
+
+  // Filter Tabs
+  .filter-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 12px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    background: #fafafa;
+
+    .tab-btn {
+      padding: 6px 14px;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.15s;
+
+      &:hover { border-color: #10b981; color: #10b981; }
+
+      &.active {
+        background: #10b981;
+        border-color: #10b981;
+        color: #ffffff;
+      }
+    }
+  }
+
+  // Task List
+  .task-list {
+    padding: 8px 0;
+    max-height: 420px;
+    overflow-y: auto;
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 28px;
+      border-bottom: 1px solid #f8fafc;
+      transition: background 0.1s;
+
+      &:hover { background: #f8fafc; }
+
+      &.completed {
+        opacity: 0.65;
+        .task-name { text-decoration: line-through; color: #94a3b8; }
+      }
+
+      &.overdue { background: #fff7ed; border-left: 3px solid #f97316; }
+
+      .task-status-icon {
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        flex-shrink: 0;
+        font-size: 14px;
+        font-weight: 700;
+
+        .icon-complete {
+          background: #10b981;
+          color: white;
+          width: 100%; height: 100%;
+          display: flex; align-items: center; justify-content: center;
+          border-radius: 50%;
+        }
+        .icon-overdue {
+          background: #f97316;
+          color: white;
+          width: 100%; height: 100%;
+          display: flex; align-items: center; justify-content: center;
+          border-radius: 50%;
+        }
+        .icon-pending { color: #cbd5e1; font-size: 20px; }
+      }
+
+      .task-info {
+        flex: 1;
+        .task-name {
+          font-size: 14px;
+          font-weight: 500;
+          color: #1e293b;
+          margin-bottom: 4px;
+        }
+        .task-meta {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+          font-size: 12px;
+          color: #94a3b8;
+        }
+      }
+
+      .dept-badge {
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+
+        &.dept-it { background: #dbeafe; color: #1d4ed8; }
+        &.dept-facilities { background: #fef3c7; color: #92400e; }
+        &.dept-payroll { background: #fce7f3; color: #9d174d; }
+      }
+
+      .priority-dot {
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        &.priority-1 { background: #ef4444; }
+        &.priority-2 { background: #f97316; }
+        &.priority-3 { background: #10b981; }
+        &.priority-4 { background: #94a3b8; }
+      }
+    }
+  }
+
+  // Empty State
+  .empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: #94a3b8;
+
+    .empty-icon { font-size: 48px; margin-bottom: 16px; }
+    h3 { margin: 0 0 8px; font-size: 16px; color: #64748b; }
+    p { margin: 0; font-size: 14px; }
+  }
+
+  // Footer
+  .widget-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 28px;
+    border-top: 1px solid #f1f5f9;
+    background: #fafafa;
+
+    .footer-text { font-size: 13px; color: #64748b; }
+
+    .view-case-link {
+      font-size: 13px;
+      font-weight: 600;
+      color: #10b981;
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+  }
+}

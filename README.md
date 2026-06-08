@@ -1,157 +1,236 @@
-# HRSD Employee Onboarding Automation
+# 🧩 HRSD Employee Onboarding — Scoped Application
 
-## Overview
-
-A custom ServiceNow HRSD application designed and developed to automate employee onboarding processes using Flow Designer, custom tables, automated task creation, progress tracking, reporting dashboards, and role-based access control.
-
-## Project Features
-
-- Employee onboarding request management
-- Automated provisioning log creation
-- Department-specific task generation
-- Progress tracking automation
-- Completion percentage updates
-- Reporting and analytics dashboards
-- Role-based access design
-- REST API integration architecture
+> A fully scoped ServiceNow HRSD application for end-to-end employee onboarding, built on a Personal Developer Instance (PDI).
 
 ---
 
-## Application Architecture
+## 📌 Project Overview
 
-Employee Onboarding Request
-↓
-Employee Onboarding Master Flow
-↓
-Provisioning Logs
-↓
-Department Tasks
-↓
-Department Task Progress Tracker
-↓
-Completion Percentage Update
+This application automates the employee onboarding lifecycle using ServiceNow's HR Service Delivery (HRSD) module. It orchestrates provisioning tasks across IT, Facilities, and Payroll departments using HR Cases, HR Tasks, and Lifecycle Events — all triggered automatically upon new hire approval.
 
 ---
 
-## Custom Tables
+## ✨ Key Features
 
-### Employee Onboarding Request
-
-Stores employee onboarding information including:
-
-- Employee Name
-- Employee ID
-- Department
-- Manager
-- Job Title
-- Employee Type
-- Location
-- Status
-- Completion Percentage
-
-### Provisioning Log
-
-Tracks onboarding activities:
-
-- Active Directory Account Creation
-- Payroll Setup
-- Workspace Preparation
-- Laptop Allocation
-
-### Department Task
-
-Tracks departmental onboarding tasks:
-
-- IT
-- Payroll
-- Facilities
+| Feature | Description |
+|---|---|
+| **Scoped Application** | Isolated namespace (`x_hrsd_onboarding`) with controlled dependencies |
+| **HR Cases & Tasks** | Auto-created onboarding cases with department-specific task routing |
+| **Lifecycle Events** | Triggers provisioning steps on hire date milestones |
+| **Flow Designer** | Parallel multi-team task assignment with SLA milestone tracking |
+| **COE Routing** | Centre of Excellence rules to assign work to correct HR teams |
+| **Service Portal** | Employee-facing portal with real-time case status and checklist |
+| **Custom Widgets** | Onboarding checklist, document upload, and case tracker widgets |
+| **ACLs & RBAC** | Field-level access controls restricting salary and personal data |
+| **REST Integration** | Mock Active Directory integration for auto account provisioning |
 
 ---
 
-## Flow Designer Automations
+## 🏗️ Architecture
 
-### Employee Onboarding Master Flow
-
-Automatically:
-
-- Creates provisioning log records
-- Creates department task records
-- Updates onboarding request status
-- Initiates onboarding workflow
-
-### Department Task Progress Tracker
-
-Automatically:
-
-- Monitors completed department tasks
-- Updates onboarding progress
-- Updates onboarding request status
-
----
-
-## Reports
-
-### Onboarding Requests by Department
-
-Tracks onboarding requests across departments.
-
-### Requests by Status
-
-Displays request status distribution.
-
-### Department Task Distribution
-
-Shows departmental task workload.
+```
+New Hire Record Created
+        │
+        ▼
+ HR Case (Onboarding)
+        │
+   ┌────┴────┐
+   │  Flow   │ ──── COE Routing Rules
+   │Designer │
+   └────┬────┘
+        │
+   ┌────┴──────────────────────┐
+   │                           │
+   ▼                           ▼
+IT Tasks                  Facilities Tasks
+(Account Provisioning,    (Badge, Desk,
+ Laptop, Software)         Parking Access)
+        │
+        ▼
+  REST API Call ──► Mock Active Directory
+  (Account auto-provisioned on case approval)
+        │
+        ▼
+  Payroll Tasks
+  (Bank details, Tax setup)
+        │
+        ▼
+  Employee Service Portal
+  (Checklist visibility, Doc uploads, Status)
+```
 
 ---
 
-## Roles
+## 📁 Repository Structure
 
-Custom roles created:
-
-- HRSD HR
-- HRSD IT
-- HRSD Payroll
-- HRSD Facilities
+```
+hrsd-onboarding/
+├── README.md
+├── docs/
+│   ├── architecture.md          # Detailed system design
+│   ├── setup-guide.md           # PDI installation steps
+│   ├── acl-matrix.md            # Role & field access reference
+│   └── screenshots/             # UI screenshots from PDI
+├── update-sets/
+│   └── hrsd_onboarding_v1.xml   # Exportable ServiceNow Update Set
+├── scripts/
+│   ├── business-rules/
+│   │   ├── create_onboarding_tasks.js
+│   │   └── notify_manager_on_completion.js
+│   ├── client-scripts/
+│   │   └── validate_start_date.js
+│   ├── script-includes/
+│   │   └── OnboardingUtils.js
+│   └── rest-integration/
+│       └── active_directory_provisioning.js
+├── flow-designer/
+│   └── onboarding_flow_spec.md  # Flow Designer configuration spec
+├── widgets/
+│   ├── onboarding-checklist/
+│   │   ├── widget.html
+│   │   ├── widget.js
+│   │   └── widget.scss
+│   ├── document-upload/
+│   │   ├── widget.html
+│   │   ├── widget.js
+│   │   └── widget.scss
+│   └── case-status-tracker/
+│       ├── widget.html
+│       ├── widget.js
+│       └── widget.scss
+├── acls/
+│   └── acl_definitions.md
+├── service-portal/
+│   └── portal_config.md
+└── .github/
+    └── workflows/
+        └── validate-xml.yml
+```
 
 ---
 
-## Technologies Used
+## 🚀 Getting Started
 
-- ServiceNow Studio
-- Flow Designer
-- Custom Tables
-- Reporting & Dashboards
-- ACL Security
-- REST API Integration
+### Prerequisites
+- ServiceNow Personal Developer Instance (PDI) — [Request free at developer.servicenow.com](https://developer.servicenow.com)
+- HRSD plugin activated on your PDI
+- GitHub account for source control integration
 
----
+### Installation via Update Set
 
-## Screenshots
+1. Clone this repo
+2. In your PDI: **System Update Sets → Retrieved Update Sets → Import Update Set from XML**
+3. Upload `update-sets/hrsd_onboarding_v1.xml`
+4. Preview and Commit the Update Set
+5. Navigate to **HRSD → Administration** to verify the app loaded
 
-Screenshots will be added in the `/screenshots` folder.
+### Installation via Studio Source Control (Recommended)
 
-- Employee Onboarding Request
-- Provisioning Logs
-- Department Tasks
-- Employee Onboarding Master Flow
-- Department Task Progress Tracker
-- Reports Dashboard
-
----
-
-## Future Enhancements
-
-- Manager Approval Workflow
-- Email Notifications
-- Scripted REST APIs
-- Employee Self-Service Portal
-- Advanced Dashboard Analytics
+1. In your PDI, open **Studio**
+2. Go to **Source Control → Import from Source Control**
+3. Enter this repository URL
+4. Branch: `main`
+5. Studio will pull all application files automatically
 
 ---
 
-## Author
+## 🔐 Security Design
 
-Developed by Manasa Lakshmi Nekkanti
+### Role Hierarchy
 
-ServiceNow HRSD Employee Onboarding Automation Project
+| Role | Access |
+|---|---|
+| `x_hrsd_onboarding.hr_admin` | Full access to all HR Cases, salary, personal data |
+| `x_hrsd_onboarding.hr_agent` | HR Cases and Tasks — no salary fields |
+| `x_hrsd_onboarding.it_agent` | IT Tasks only |
+| `x_hrsd_onboarding.facilities_agent` | Facilities Tasks only |
+| `x_hrsd_onboarding.payroll_agent` | Payroll Tasks + salary fields |
+| `x_hrsd_onboarding.employee` | Own onboarding portal view only |
+
+### Field-Level ACLs
+- `u_salary`, `u_bank_account`, `u_tax_id` — restricted to `hr_admin` and `payroll_agent` only
+- `u_personal_address`, `u_emergency_contact` — restricted from IT and Facilities agents
+- See [`acls/acl_definitions.md`](acls/acl_definitions.md) for the full matrix
+
+---
+
+## 🔗 REST Integration — Mock Active Directory
+
+The app calls a mock AD REST endpoint on **HR Case approval**:
+
+```
+POST /api/mock-ad/provision-user
+Authorization: Basic (stored in ServiceNow Credential Store)
+Content-Type: application/json
+
+{
+  "employee_id": "EMP-001",
+  "first_name": "Manasa",
+  "last_name": "Reddy",
+  "department": "Engineering",
+  "start_date": "2025-08-01",
+  "manager_email": "manager@company.com"
+}
+```
+
+Response triggers account creation status update back on the HR Case.
+
+See [`scripts/rest-integration/active_directory_provisioning.js`](scripts/rest-integration/active_directory_provisioning.js) for the full Script Include.
+
+---
+
+## 📊 Flow Designer — Onboarding Flow
+
+The main flow (`Onboarding Orchestration Flow`) runs on HR Case creation with subject `New Hire Onboarding`:
+
+1. **Trigger**: HR Case created with Lifecycle Event = `New Hire`
+2. **Stage 1 — Parallel**: Create IT Tasks + Facilities Tasks simultaneously
+3. **Stage 2 — Wait**: SLA milestone — all Stage 1 tasks complete
+4. **Stage 3**: REST call to Active Directory for account provisioning
+5. **Stage 4**: Create Payroll Tasks
+6. **Stage 5**: Notify employee via email + Service Portal notification
+7. **Stage 6 — Wait**: All tasks complete
+8. **Stage 7**: Close HR Case, trigger Lifecycle Event `Onboarding Complete`
+
+---
+
+## 🖥️ Service Portal
+
+**URL**: `https://[your-pdi].service-now.com/onboarding`
+
+### Pages
+| Page | Description |
+|---|---|
+| `/onboarding/home` | Employee welcome page with progress overview |
+| `/onboarding/checklist` | Interactive task checklist widget |
+| `/onboarding/documents` | Document upload widget (ID proof, tax forms) |
+| `/onboarding/status` | Real-time HR Case status tracker |
+
+---
+
+## 📸 Screenshots
+
+> _Add screenshots from your PDI under `docs/screenshots/` after deployment._
+
+---
+
+## 🛠️ Tech Stack
+
+- **Platform**: ServiceNow (Washington DC / Xanadu release)
+- **Module**: HR Service Delivery (HRSD)
+- **Tools Used**: Flow Designer, Studio, Service Portal, REST Message, Update Sets
+- **Languages**: JavaScript (ServiceNow GlideScript), AngularJS (Service Portal widgets), HTML/SCSS
+
+---
+
+## 📄 License
+
+This project is for portfolio and educational demonstration purposes.
+
+---
+
+## 👩‍💻 Author
+
+**Manasa** — CSE B.Tech, KL University Hyderabad  
+ServiceNow Certified Application Developer | Certified System Administrator  
+[LinkedIn](#) · [GitHub](#)
